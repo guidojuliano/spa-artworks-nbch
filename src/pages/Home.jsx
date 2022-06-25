@@ -3,6 +3,8 @@ import { allArtowrks } from "../functions/functions";
 import { Container } from "@mui/material";
 import * as React from "react";
 import "../App.css";
+import { TablesArtworks } from "../components/TablesArtworks";
+
 function Home() {
   React.useEffect(() => {
     allArtowrks();
@@ -12,11 +14,7 @@ function Home() {
       <Header />
       <Container>
         <h1>Obras de arte</h1>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-          euismod, nisl eget consectetur sagittis, nisl nunc egestas nisi,
-          euismod aliquam nisl nunc eget.
-        </p>
+        <TablesArtworks />
       </Container>
     </div>
   );
