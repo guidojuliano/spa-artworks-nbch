@@ -11,7 +11,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/:id" component={Artwork} />
+          <Route path="/artwork/:id" element={<Artwork />} />
         </Routes>
       </BrowserRouter>
     </div>

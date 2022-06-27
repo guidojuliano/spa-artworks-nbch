@@ -3,7 +3,7 @@
 }
 
 .custom-navbar {
-  height: 5vh;
+  height:50px;
   display: flex;
   padding: 1em;
   justify-content: start;
@@ -51,4 +51,13 @@ a {
   text-decoration: none;
   font-weight: bold;
   transition: 0.5s;
+}
+
+.center-preloader-table {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: calc(50% - 60px);
 }

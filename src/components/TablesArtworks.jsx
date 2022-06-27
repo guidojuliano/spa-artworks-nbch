@@ -9,6 +9,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { allArtowrks, getArtworkPage } from "../functions/functions";
 import { Grid, Pagination } from "@mui/material";
+import Preloader from "./Preloader";
+import { Container } from "react-bootstrap";
 
 const TablesArtworks = () => {
   const [artworks, setArtworks] = useState(null);
@@ -73,14 +75,14 @@ const TablesArtworks = () => {
               ? artworks?.data?.map((row, index) => (
                   <StyledTableRow key={index}>
                     <StyledTableCell component="th" scope="row">
-                      <a href="#">{row.title}</a>
+                      <a href={`/artwork/${row.id}`}>{row.title}</a>
                     </StyledTableCell>
                     <StyledTableCell>{row.artist_title}</StyledTableCell>
                     <StyledTableCell>{row.place_of_origin}</StyledTableCell>
                     <StyledTableCell>{row.date_display}</StyledTableCell>
                   </StyledTableRow>
                 ))
-              : "Loading..."}
+              : <div className="center-preloader-table"><Preloader /></div>}
           </TableBody>
         </Table>
       </TableContainer>
