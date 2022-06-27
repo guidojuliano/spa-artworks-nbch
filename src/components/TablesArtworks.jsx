@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,9 +7,30 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { allArtowrks } from "../functions/functions";
+import { allArtowrks, getArtworkPage } from "../functions/functions";
+import { Grid, Pagination } from "@mui/material";
 
-function TablesArtworks() {
+const TablesArtworks = () => {
+  const [artworks, setArtworks] = useState(null);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    allArtowrks().then((data) => {
+      setArtworks(data);
+      console.info(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    getArtworkPage().then((data) => {
+      setArtworks(data);
+    });
+  }, [page]);
+
+  const handlePaginationChange = (value) => {
+    setPage(value + 1);
+  };
+
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
@@ -30,65 +51,47 @@ function TablesArtworks() {
     },
   }));
 
-  function createData(title, artist, origin, date, exhibition) {
-    return { title, artist, origin, date, exhibition };
-  }
-  const [artworks, setArtworks] = React.useState(null);
-  React.useEffect(() => {
-    allArtowrks(setArtworks);
-  }, []);
-
-  const rows = [
-    artworks.map((artwork) =>
-      createData(
-        artwork.title,
-        artwork.artist_title,
-        artwork.place_of_origin,
-        artwork.date_display,
-        artwork.exhibition_history
-      )
-    ),
-  ];
-
   return (
-    <>
+    <Grid
+      container
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+    >
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell align="center">TITULO</StyledTableCell>
-              <StyledTableCell align="right">ARTISTA</StyledTableCell>
-              <StyledTableCell align="right">ORIGEN</StyledTableCell>
-              <StyledTableCell align="right">FECHA</StyledTableCell>
-              <StyledTableCell align="right">EXHIBICION</StyledTableCell>
+              <StyledTableCell align="center">ARTISTA</StyledTableCell>
+              <StyledTableCell align="center">ORIGEN</StyledTableCell>
+              <StyledTableCell align="center">FECHA</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {artworks !== null
-              ? rows.map((row) => (
-                  <StyledTableRow key={row.title}>
+            {artworks
+              ? artworks?.data?.map((row, index) => (
+                  <StyledTableRow key={index}>
                     <StyledTableCell component="th" scope="row">
-                      {row.title}
+                      <a href="#">{row.title}</a>
                     </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.artist}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.origin}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">{row.date}</StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.exhibition}
-                    </StyledTableCell>
+                    <StyledTableCell>{row.artist_title}</StyledTableCell>
+                    <StyledTableCell>{row.place_of_origin}</StyledTableCell>
+                    <StyledTableCell>{row.date_display}</StyledTableCell>
                   </StyledTableRow>
                 ))
-              : "Loading..."}{" "}
-            {/* preloader */}
+              : "Loading..."}
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+      <Pagination
+        sx={{ pt: 3, pb: 3 }}
+        count={artworks?.pagination?.total_pages}
+        page={page}
+        onChange={handlePaginationChange}
+      />
+    </Grid>
   );
-}
+};
 
 export { TablesArtworks };
