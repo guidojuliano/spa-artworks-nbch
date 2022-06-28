@@ -11,7 +11,6 @@ function Home() {
   }, []);
   return (
     <div className="home" id="home">
-      <Header />
       <Container>
         <h1>Obras de arte</h1>
         <TablesArtworks />
