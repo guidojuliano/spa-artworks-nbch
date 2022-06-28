@@ -7,13 +7,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { allArtowrks, getArtworkPage } from "../functions/functions";
-import { Grid, Pagination } from "@mui/material";
+import { allArtowrks } from "../functions/functions";
+import { Grid } from "@mui/material";
 import Preloader from "./Preloader";
+import { PaginationArtworks } from "./PaginationArtworks";
 
 const TablesArtworks = () => {
   const [artworks, setArtworks] = useState(null);
-  const [page, setPage] = useState(1);
+  
 
   useEffect(() => {
     allArtowrks().then((data) => {
@@ -22,15 +23,6 @@ const TablesArtworks = () => {
     });
   }, []);
 
-  useEffect(() => {
-    getArtworkPage().then((data) => {
-      setArtworks(data);
-    });
-  }, [page]);
-
-  const handlePaginationChange = (value) => {
-    setPage(value + 1);
-  };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -86,12 +78,7 @@ const TablesArtworks = () => {
                 <Preloader />
               </div>
             )}
-            <Pagination
-              sx={{ pt: 3, pb: 3 }}
-              count={artworks?.pagination?.total_pages}
-              page={artworks?.pagination?.current_page}
-              onChange={handlePaginationChange}
-            />
+            <PaginationArtworks />
           </TableBody>
         </Table>
       </TableContainer>

@@ -1,4 +1,3 @@
-import Header from "../components/Header";
 import { Container } from "@mui/material";
 import "../App.css";
 import React, { useEffect, useState } from "react";
