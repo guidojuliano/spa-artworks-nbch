@@ -7,7 +7,7 @@ function Preloader() {
     <>
       <Container>
         <div className="preloader__content">
-          <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
           
         </div>
       </Container>

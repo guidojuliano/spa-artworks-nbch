@@ -1,4 +1,3 @@
-import Header from "../components/Header";
 import { allArtowrks } from "../functions/functions";
 import { Container } from "@mui/material";
 import * as React from "react";

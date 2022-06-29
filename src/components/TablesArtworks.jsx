@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,33 +7,41 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { allArtowrks, getArtworkPage } from "../functions/functions";
+import { allArtowrks } from "../functions/functions";
 import { Grid } from "@mui/material";
 import Preloader from "./Preloader";
 import { PaginationArtworks } from "./PaginationArtworks";
 
 const TablesArtworks = () => {
-  const [artworks, setArtworks] = useState(null);
-
-  useEffect(() => {
-    allArtowrks().then((data) => {
-      setArtworks(data);
-      console.info(data);
-    });
-  }, []);
-
+  const base_url = "https://api.artic.edu/api/v1/artworks";
+  const [artworks, setArtworks] = useState([]);
   const [page, setPage] = useState({});
-
+  
   useEffect(() => {
-    getArtworkPage(1).then((data) => {
+    allArtowrks(base_url).then((data) => {
+      setArtworks(data.data);
       setPage(data.pagination);
-      console.info(data.pagination);
     });
   }, []);
 
-  const onPrevious = () => {};
+  const updateUrl = (url) => {
+    allArtowrks(url).then((data) => {
+      setArtworks(data.data);
+      setPage(data.pagination);
+    });
+    allArtowrks(url).catch((error) => {
+      console.log(error);
+    });
+  }
+ 
+  const onPrevious = () => {
+    updateUrl(page.prev_url);
+  };
 
-  const onNext = () => {};
+  const onNext = () => {
+    updateUrl(page.next_url);
+  };
+
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -57,6 +64,7 @@ const TablesArtworks = () => {
   }));
 
   return (
+    <>
     <Grid
       container
       direction="column"
@@ -74,28 +82,30 @@ const TablesArtworks = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {artworks ? (
-              artworks?.data?.map((row, index) => (
-                <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row">
-                    <a href={`/artwork/${row.id}`}>{row.title}</a>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.artist_title}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.place_of_origin}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.date_display}
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))
-            ) : (
-              <div className="center-preloader-table">
-                <Preloader />
-              </div>
-            )}
+            <React.Fragment>
+              {artworks ? (
+                artworks.map((row, index) => (
+                  <StyledTableRow key={index}>
+                    <StyledTableCell component="th" scope="row">
+                      <a href={`/artwork/${row.id}`}>{row.title}</a>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {row.artist_title}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {row.place_of_origin}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {row.date_display}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))
+              ) : (
+                <div className="center-preloader-table">
+                  <Preloader />
+                </div>
+              )}
+            </React.Fragment>
           </TableBody>
         </Table>
         <PaginationArtworks
@@ -106,6 +116,7 @@ const TablesArtworks = () => {
         />
       </TableContainer>
     </Grid>
+    </>
   );
 };
 
