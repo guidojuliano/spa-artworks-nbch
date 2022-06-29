@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,14 +8,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { allArtowrks } from "../functions/functions";
+import { allArtowrks, getArtworkPage } from "../functions/functions";
 import { Grid } from "@mui/material";
 import Preloader from "./Preloader";
 import { PaginationArtworks } from "./PaginationArtworks";
 
 const TablesArtworks = () => {
   const [artworks, setArtworks] = useState(null);
-  
 
   useEffect(() => {
     allArtowrks().then((data) => {
@@ -23,6 +23,18 @@ const TablesArtworks = () => {
     });
   }, []);
 
+  const [page, setPage] = useState({});
+
+  useEffect(() => {
+    getArtworkPage(1).then((data) => {
+      setPage(data.pagination);
+      console.info(data.pagination);
+    });
+  }, []);
+
+  const onPrevious = () => {};
+
+  const onNext = () => {};
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -68,9 +80,15 @@ const TablesArtworks = () => {
                   <StyledTableCell component="th" scope="row">
                     <a href={`/artwork/${row.id}`}>{row.title}</a>
                   </StyledTableCell>
-                  <StyledTableCell>{row.artist_title}</StyledTableCell>
-                  <StyledTableCell>{row.place_of_origin}</StyledTableCell>
-                  <StyledTableCell>{row.date_display}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.artist_title}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.place_of_origin}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {row.date_display}
+                  </StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (
@@ -78,9 +96,14 @@ const TablesArtworks = () => {
                 <Preloader />
               </div>
             )}
-            <PaginationArtworks />
           </TableBody>
         </Table>
+        <PaginationArtworks
+          prev={page.prev_url}
+          next={page.next_url}
+          onPrevious={onPrevious}
+          onNext={onNext}
+        />
       </TableContainer>
     </Grid>
   );
