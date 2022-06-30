@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { allArtowrks } from "../functions/functions";
-import { Grid } from "@mui/material";
+import { getArtworks, prepareUrlSearch }  from "../functions/functions";
+import { Grid, Paper, TableRow, TableHead, TableContainer, TableBody, Table, TextField } from "@mui/material";
 import Preloader from "./Preloader";
 import { PaginationArtworks } from "./PaginationArtworks";
 
@@ -16,55 +10,48 @@ const TablesArtworks = () => {
   const base_url = "https://api.artic.edu/api/v1/artworks";
   const [artworks, setArtworks] = useState([]);
   const [page, setPage] = useState({});
-  const [search, setSearch] = useState("");
+  
 
-  const updateUrl = (url) => {
-    allArtowrks(url).then((data) => {
+  const updateArtworks = (url) => {
+    getArtworks(url).then((data) => {
       setArtworks(data.data);
       setPage(data.pagination);
     });
-    allArtowrks(url).catch((error) => {
+    getArtworks(url).catch((error) => {
       console.log(error);
     });
   };
 
+  //Paginacion
+
   const onPrevious = () => {
-    updateUrl(page.prev_url);
+    updateArtworks(page.prev_url);
   };
 
   const onNext = () => {
-    updateUrl(page.next_url);
-  };
-
-  const handleChange = (e) => {
-    setSearch(e.target.value);
-    filter(e.target.value);
-  };
-
-  const filter = (searching) => {
-    var searchResults = artworks.filter((element) => {
-      if (
-        element.title
-          .toString()
-          .toLowerCase()
-          .includes(searching.toLowerCase()) ||
-        element.artist_title
-          .toString()
-          .toLowerCase()
-          .includes(searching.toLowerCase())
-      ) {
-        return element;
-      }
-    });
-    setArtworks(searchResults);
+    updateArtworks(page.next_url);
   };
 
   useEffect(() => {
-    allArtowrks(base_url).then((data) => {
+    getArtworks(base_url).then((data) => {
       setArtworks(data.data);
       setPage(data.pagination);
     });
   }, []);
+
+  //Busqueda
+
+  const [search, setSearch] = useState("");
+
+  const onSearch = (e) => {
+
+    console.log('onSearch', e.target.value);
+
+    setSearch(e.target.value);
+    updateArtworks(prepareUrlSearch(e.target.value));
+  }
+
+  //Construccion de tabla MUI
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -90,21 +77,14 @@ const TablesArtworks = () => {
     <>
       <Grid
         container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
+        justifyContent="start"
+        alignItems="start"
       >
-        <div className="containerInput">
-          <input
-            className="form-control inputBuscar"
-            value={search}
-            placeholder="Búsqueda por Nombre o Empresa"
-            onChange={handleChange}
-          />
-          <button className="btn btn-success">
-            <i className="fas fa-search"></i>
-          </button>
+        <div className="search-container">
+          <TextField id="outlined-basic" label="Búsqueda" variant="outlined" value={search} onChange={onSearch} />
         </div>
+      </ Grid>
+      <Grid container justifyContent="center" alignItems="center">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
