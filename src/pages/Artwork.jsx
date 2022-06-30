@@ -28,7 +28,9 @@ function Artwork() {
             />
           </Container>
         ) : (
-          <Preloader />
+          <div className="center-preloader-table">
+            <Preloader />
+          </div>
         )}
       </div>
     </>

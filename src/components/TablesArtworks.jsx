@@ -16,13 +16,7 @@ const TablesArtworks = () => {
   const base_url = "https://api.artic.edu/api/v1/artworks";
   const [artworks, setArtworks] = useState([]);
   const [page, setPage] = useState({});
-  
-  useEffect(() => {
-    allArtowrks(base_url).then((data) => {
-      setArtworks(data.data);
-      setPage(data.pagination);
-    });
-  }, []);
+  const [search, setSearch] = useState("");
 
   const updateUrl = (url) => {
     allArtowrks(url).then((data) => {
@@ -32,8 +26,8 @@ const TablesArtworks = () => {
     allArtowrks(url).catch((error) => {
       console.log(error);
     });
-  }
- 
+  };
+
   const onPrevious = () => {
     updateUrl(page.prev_url);
   };
@@ -42,6 +36,35 @@ const TablesArtworks = () => {
     updateUrl(page.next_url);
   };
 
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    filter(e.target.value);
+  };
+
+  const filter = (searching) => {
+    var searchResults = artworks.filter((element) => {
+      if (
+        element.title
+          .toString()
+          .toLowerCase()
+          .includes(searching.toLowerCase()) ||
+        element.artist_title
+          .toString()
+          .toLowerCase()
+          .includes(searching.toLowerCase())
+      ) {
+        return element;
+      }
+    });
+    setArtworks(searchResults);
+  };
+
+  useEffect(() => {
+    allArtowrks(base_url).then((data) => {
+      setArtworks(data.data);
+      setPage(data.pagination);
+    });
+  }, []);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -65,57 +88,74 @@ const TablesArtworks = () => {
 
   return (
     <>
-    <Grid
-      container
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell align="center">TITULO</StyledTableCell>
-              <StyledTableCell align="center">ARTISTA</StyledTableCell>
-              <StyledTableCell align="center">ORIGEN</StyledTableCell>
-              <StyledTableCell align="center">FECHA</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <React.Fragment>
-              {artworks ? (
-                artworks.map((row, index) => (
-                  <StyledTableRow key={index}>
-                    <StyledTableCell component="th" scope="row">
-                      <a href={`/artwork/${row.id}`}>{row.title}</a>
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.artist_title}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.place_of_origin}
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {row.date_display}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))
-              ) : (
-                <div className="center-preloader-table">
-                  <Preloader />
-                </div>
-              )}
-            </React.Fragment>
-          </TableBody>
-        </Table>
-        <PaginationArtworks
-          prev={page.prev_url}
-          next={page.next_url}
-          onPrevious={onPrevious}
-          onNext={onNext}
-        />
-      </TableContainer>
-    </Grid>
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <div className="containerInput">
+          <input
+            className="form-control inputBuscar"
+            value={search}
+            placeholder="Búsqueda por Nombre o Empresa"
+            onChange={handleChange}
+          />
+          <button className="btn btn-success">
+            <i className="fas fa-search"></i>
+          </button>
+        </div>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell align="center">TITULO</StyledTableCell>
+                <StyledTableCell align="center">ARTISTA</StyledTableCell>
+                <StyledTableCell align="center">ORIGEN</StyledTableCell>
+                <StyledTableCell align="center">FECHA</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <>
+                {artworks ? (
+                  artworks.map((row, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell component="th" scope="row">
+                        <a href={`/artwork/${row.id}`}>{row.title}</a>
+                      </StyledTableCell>
+                      {row.artist_title ? (
+                        <StyledTableCell align="center">
+                          {row.artist_title}
+                        </StyledTableCell>
+                      ) : (
+                        <StyledTableCell align="center">
+                          ANONIMO
+                        </StyledTableCell>
+                      )}
+                      <StyledTableCell align="center">
+                        {row.place_of_origin}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {row.date_display}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                ) : (
+                  <div className="center-preloader-table">
+                    <Preloader />
+                  </div>
+                )}
+              </>
+            </TableBody>
+          </Table>
+          <PaginationArtworks
+            prev={page.prev_url}
+            next={page.next_url}
+            onPrevious={onPrevious}
+            onNext={onNext}
+          />
+        </TableContainer>
+      </Grid>
     </>
   );
 };
