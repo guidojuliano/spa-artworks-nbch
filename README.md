@@ -12,6 +12,7 @@ Este proyecto de React se realizo como desafío para el Nuevo Banco del Chaco.
 ## Librerias
 -Material UI\
 -React-Bootstrap\
+-React-Spinners\
 -Axios\
 -React-Router-Dom
 
