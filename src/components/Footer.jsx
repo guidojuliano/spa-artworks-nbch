@@ -4,9 +4,8 @@ import "../App.css";
 function Footer() {
   return (
     <Navbar bg="dark" variant="dark" className="custom-footer">
-      <Navbar.Brand>
-        <p>Guido Juliano Mazzuchini Ubaldi</p>
-      </Navbar.Brand>
+      <p>Guido Juliano Mazzuchini Ubaldi</p>
+      <p>SPA React - Instituto de Arte de Chicago</p>
     </Navbar>
   );
 }

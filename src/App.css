@@ -21,11 +21,12 @@
 }
 
 .home,
-.artwork-content {
+.artwork-content,
+.error-404 {
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 100px);
   padding-top: 2em;
-  padding-bottom: 3em;
+  padding-bottom: 2em;
   background: rgb(245, 245, 245);
   background: -moz-radial-gradient(
     circle,
@@ -71,9 +72,8 @@ a {
 }
 
 .artwork-image {
-  width: 30vw;
+  width: 50vw;
   height: auto;
-  margin-bottom: 1em;
   border: 5px solid #000;
   border-radius: 15px;
 }
@@ -82,8 +82,14 @@ a {
   height: 50px;
   display: flex;
   padding-top: 1.5em;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
+}
+
+.custom-footer p {
+  font-size: 1em;
+  color: #fff;
+  font-weight: bold;
 }
 
 .search-container {

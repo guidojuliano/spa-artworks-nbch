@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import { getArtworks, prepareUrlSearch }  from "../functions/functions";
-import { Grid, Paper, TableRow, TableHead, TableContainer, TableBody, Table, TextField } from "@mui/material";
+import { getArtworks, prepareUrlSearch } from "../functions/functions";
+import {
+  Grid,
+  Paper,
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableBody,
+  Table,
+  TextField,
+} from "@mui/material";
 import Preloader from "./Preloader";
 import { PaginationArtworks } from "./PaginationArtworks";
 
@@ -10,16 +19,16 @@ const TablesArtworks = () => {
   const base_url = "https://api.artic.edu/api/v1/artworks";
   const [artworks, setArtworks] = useState([]);
   const [page, setPage] = useState({});
-  
 
   const updateArtworks = (url) => {
-    getArtworks(url).then((data) => {
-      setArtworks(data.data);
-      setPage(data.pagination);
-    });
-    getArtworks(url).catch((error) => {
-      console.log(error);
-    });
+    getArtworks(url)
+      .then((data) => {
+        setArtworks(data.data);
+        setPage(data.pagination);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   //Paginacion
@@ -44,12 +53,20 @@ const TablesArtworks = () => {
   const [search, setSearch] = useState("");
 
   const onSearch = (e) => {
-
-    console.log('onSearch', e.target.value);
-
     setSearch(e.target.value);
     updateArtworks(prepareUrlSearch(e.target.value));
-  }
+    const value = e.target.value;
+    if (value.trim() === "") {
+      getArtworks(base_url)
+        .then((data) => {
+          setArtworks(data.data);
+          setPage(data.pagination);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
   //Construccion de tabla MUI
 
@@ -75,15 +92,18 @@ const TablesArtworks = () => {
 
   return (
     <>
-      <Grid
-        container
-        justifyContent="start"
-        alignItems="start"
-      >
+      <Grid container justifyContent="start" alignItems="start">
         <div className="search-container">
-          <TextField id="outlined-basic" label="Búsqueda" variant="outlined" value={search} onChange={onSearch} />
+          <TextField
+            color="secondary"
+            id="outlined-basic"
+            label="Búsqueda"
+            variant="outlined"
+            value={search}
+            onChange={onSearch}
+          />
         </div>
-      </ Grid>
+      </Grid>
       <Grid container justifyContent="center" alignItems="center">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
