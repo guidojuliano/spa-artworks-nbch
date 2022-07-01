@@ -95,3 +95,9 @@ a {
 .search-container {
   margin-bottom: 2em;
 }
+
+@media screen and (max-width: 768px) {
+  .artwork-image {
+    width: 100%;
+  }
+}
