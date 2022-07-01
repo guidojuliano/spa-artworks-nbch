@@ -30,4 +30,4 @@ Ver online: https://artworksguido.vercel.app/
 
 ## Preview del proyecto
 
-![image](https://user-images.githubusercontent.com/91292914/176907485-daee516e-f3a4-4893-8ddb-5d65b1266dbe.png)
+![image](https://user-images.githubusercontent.com/91292914/176908946-4cfaf486-3968-4248-aa0c-d7ac75182070.png)
