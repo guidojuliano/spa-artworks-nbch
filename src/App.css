@@ -96,6 +96,17 @@ a {
   margin-bottom: 2em;
 }
 
+.pagination-container {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.table-row p {
+  margin-bottom: -0.1em;
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
 @media screen and (max-width: 768px) {
   .artwork-image {
     width: 100%;

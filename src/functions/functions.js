@@ -1,6 +1,5 @@
 import axios from "axios";
 
-
 export const getArtworks = async (url) => {
   const response = await axios.get(url);
   return response.data;
@@ -13,6 +12,10 @@ export const getArtwork = async (id) => {
   return response.data;
 };
 
-export const prepareUrlSearch = (query) => {  
-  return `https://api.artic.edu/api/v1/artworks/search?q=${query}` 
-}
+export const prepareUrlSearch = (query) => {
+  return `https://api.artic.edu/api/v1/artworks/search?q=${query}`;
+};
+
+export const prepareUrlPagination = (page) => {
+  return `https://api.artic.edu/api/v1/artworks?page=${page}`;
+};

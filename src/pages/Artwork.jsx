@@ -21,11 +21,15 @@ function Artwork() {
           <Container>
             <h1>{artwork.data.title}</h1>
             <h4>{artwork.data.artist_title}</h4>
-            <img
-              src={`https://www.artic.edu/iiif/2/${artwork.data.image_id}/full/843,/0/default.jpg`}
-              alt={artwork.data.title}
-              className="artwork-image"
-            />
+            {artwork.data.image_id !== null ? (
+              <img
+                src={`https://www.artic.edu/iiif/2/${artwork.data.image_id}/full/843,/0/default.jpg`}
+                alt={artwork.data.title}
+                className="artwork-image"
+              />
+            ) : (
+              <p>No image available</p>
+            )}
           </Container>
         ) : (
           <div className="center-preloader-table">

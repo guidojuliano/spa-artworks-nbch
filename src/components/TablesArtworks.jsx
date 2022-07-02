@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import { getArtworks, prepareUrlSearch } from "../functions/functions";
+import {
+  getArtworks,
+  prepareUrlSearch,
+  prepareUrlPagination,
+} from "../functions/functions";
 import {
   Grid,
   Paper,
@@ -11,9 +15,9 @@ import {
   TableBody,
   Table,
   TextField,
+  Pagination,
 } from "@mui/material";
 import Preloader from "./Preloader";
-import { PaginationArtworks } from "./PaginationArtworks";
 
 const TablesArtworks = () => {
   const base_url = "https://api.artic.edu/api/v1/artworks";
@@ -33,20 +37,16 @@ const TablesArtworks = () => {
 
   //Paginacion
 
-  const onPrevious = () => {
-    updateArtworks(page.prev_url);
-  };
-
-  const onNext = () => {
-    updateArtworks(page.next_url);
-  };
-
   useEffect(() => {
     getArtworks(base_url).then((data) => {
       setArtworks(data.data);
       setPage(data.pagination);
     });
   }, []);
+
+  const onPageChange = (event, value) => {
+    updateArtworks(prepareUrlPagination(value));
+  };
 
   //Busqueda
 
@@ -86,7 +86,7 @@ const TablesArtworks = () => {
     },
     // hide last border
     "&:last-child td, &:last-child th": {
-      border: 0,
+      border: "none",
     },
   }));
 
@@ -108,11 +108,19 @@ const TablesArtworks = () => {
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
-              <TableRow>
-                <StyledTableCell align="center">TITULO</StyledTableCell>
-                <StyledTableCell align="center">ARTISTA</StyledTableCell>
-                <StyledTableCell align="center">ORIGEN</StyledTableCell>
-                <StyledTableCell align="center">FECHA</StyledTableCell>
+              <TableRow className="table-row">
+                <StyledTableCell align="center">
+                  <p>TITULO</p>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <p>ARTISTA</p>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <p>ORIGEN</p>
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <p>FECHA</p>
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -129,7 +137,7 @@ const TablesArtworks = () => {
                         </StyledTableCell>
                       ) : (
                         <StyledTableCell align="center">
-                          ANONIMO
+                          Anónimo
                         </StyledTableCell>
                       )}
                       <StyledTableCell align="center">
@@ -148,12 +156,19 @@ const TablesArtworks = () => {
               </>
             </TableBody>
           </Table>
-          <PaginationArtworks
-            prev={page.prev_url}
-            next={page.next_url}
-            onPrevious={onPrevious}
-            onNext={onNext}
-          />
+          <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+            className="pagination-container"
+          >
+            <Pagination
+              count={page.total_pages}
+              color="secondary"
+              onChange={onPageChange}
+              className="pagination"
+            />
+          </Grid>
         </TableContainer>
       </Grid>
     </>
