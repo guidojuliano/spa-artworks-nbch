@@ -3,7 +3,7 @@
 Este proyecto de React se realizo como desafío para el Nuevo Banco del Chaco.
 
 ## Funcionalidades
--Navegabilidad entre tabla de obras de arte y detalle de cada una\
+-Navegabilidad entre tabla de obras de arte y detalle de cada una obtenidas de https://api.artic.edu/\
 -En los detalles de la obra de arte se muestra la imágen de la misma con su respectivo titulo y artista\
 -Buscador de obras de arte\
 -Paginacion que muestra las obras de arte cada 12 objetos\
